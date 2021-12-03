@@ -68,7 +68,21 @@ public final class EmbeddedElastic {
         return this;
     }
 
-    private void installElastic() throws IOException, InterruptedException {
+    /**
+     * Downloads Elasticsearch with specified plugins, setups them and starts
+     */
+    public synchronized EmbeddedElastic startAfterInstallation() throws IOException, InterruptedException {
+        if (!started) {
+            started = true;
+            startElastic();
+            createRestClient();
+            createTemplates();
+            createIndices();
+        }
+        return this;
+    }
+
+    public void installElastic() throws IOException, InterruptedException {
         ElasticSearchInstaller elasticSearchInstaller = new ElasticSearchInstaller(instanceSettings, installationDescription);
         elasticSearchInstaller.install();
         File executableFile = elasticSearchInstaller.getExecutableFile();
