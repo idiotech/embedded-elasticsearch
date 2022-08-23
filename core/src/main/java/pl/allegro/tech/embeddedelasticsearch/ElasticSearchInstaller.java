@@ -1,8 +1,10 @@
 package pl.allegro.tech.embeddedelasticsearch;
 
 import org.apache.commons.io.FileUtils;
+import org.rauschig.jarchivelib.ArchiveFormat;
 import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
+import org.rauschig.jarchivelib.CompressionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.allegro.tech.embeddedelasticsearch.InstallationDescription.Plugin;
@@ -72,7 +74,14 @@ class ElasticSearchInstaller {
     }
 
     private void unzip(Path downloadedTo, File destination) throws IOException {
-        Archiver archiver = ArchiverFactory.createArchiver("zip");
+
+
+        Archiver archiver;
+        if (downloadedTo.endsWith(".zip")) {
+            archiver = ArchiverFactory.createArchiver(ArchiveFormat.ZIP);
+        } else {
+            archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+        }
         archiver.extract(downloadedTo.toFile(), destination);
     }
 
