@@ -35,12 +35,18 @@ class InstallFromVersion implements InstallationSource {
         }
     }
 
+    private static final String os = System.getProperty("os.name");
+
     private enum ElsDownloadUrl {
         ELS_1x("1.", "https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-{VERSION}.zip"),
         ELS_2x("2.", "https://download.elasticsearch.org/elasticsearch/release/org/elasticsearch/distribution/zip/elasticsearch/{VERSION}/elasticsearch-{VERSION}.zip"),
         ELS_5x("5.", "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{VERSION}.zip"),
         ELS_6x("6.", ELS_5x.downloadUrl),
-        ELS_7x("7.", "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{VERSION}-darwin-x86_64.tar.gz");
+        ELS_7x("7.",
+                os.equals("Mac OS X")
+                        ? "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{VERSION}-darwin-x86_64.tar.gz"
+                        : "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{VERSION}-linux-x86_64.tar.gz"
+        );
 
         String versionPrefix;
         String downloadUrl;
